@@ -210,6 +210,30 @@ blockquote p:last-child {
  *  Home Sections
  **************************************************/
 
+ .typewriter h1 {
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: auto 0; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .08em; /* Adjust as needed */
+    animation: 
+      typing 3.0s steps(40, end),
+      blink-caret .55s step-end infinite;
+  }
+  
+  /* The typing effect */
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  /* The typewriter cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: white; }
+  }
+ 
+
 @keyframes intro {
   0% {
     opacity: 0;
@@ -222,8 +246,8 @@ blockquote p:last-child {
 .home-section {
   background-color: rgb(255, 255, 255);
   padding: 110px 0 110px 0;
-  animation: intro 0.3s both;
-  animation-delay: 0.15s;
+  animation: intro 0.75s both;
+  animation-delay: 0.3s;
 }
 
 .home-section:first-of-type {
@@ -266,10 +290,10 @@ blockquote p:last-child {
 
 #profile .portrait {
   background-image: url('../img/portrait.jpg');
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   margin: 0 auto;
-  border-radius: 25%;
+  border-radius: 50%;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -279,7 +303,7 @@ blockquote p:last-child {
   font-size: 1.75em;
   font-weight: 300;
   color: #000000;
-  margin: 20px 0 10px 0;
+  margin: 20px 0 20px 0;
 }
 
 #profile .portrait-title h3 {
@@ -307,7 +331,7 @@ blockquote p:last-child {
 }
 
 #profile .social-icon li:hover {
-  transform: scale(1.2)
+  transform: scale(1.3)
 }
 
 .big-icon {
@@ -336,7 +360,7 @@ ul.ul-edu li .description p.course {
 }
 
 ul.ul-edu li .description p.institution {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: rgba(0,0,0,0.6);
 }
 
@@ -611,6 +635,7 @@ article {
 }
 
 .project-toolbar{
+  align-content: center;
   margin-bottom: 2rem;
 }
 
@@ -767,8 +792,7 @@ footer a#back_to_top i {
  **************************************************/
 
 .btn-primary {
-  border-color: #0095eb;
-  background: #0095eb;
+  background: #343535a8;
 }
 
 .btn-primary:hover,
@@ -784,8 +808,9 @@ footer a#back_to_top i {
  **************************************************/
 
 .btn-toolbar .btn {
-  font-size: 0.9rem;
-  padding: 10px 14px 9px;
+  font-family : sans-serif;
+  font-size: 1.0rem;
+  padding: 10px 20px 9px;
   border: none;
 }
 
@@ -799,12 +824,12 @@ footer a#back_to_top i {
 
 .btn-toolbar .btn.btn-primary:hover,
 .btn-toolbar .btn.btn-primary:focus {
-  background-color: rgba(0,149,235,0.6);
+  background-color: rgba(1, 12, 19, 0.6);
 }
 
 .btn-toolbar .btn.btn-primary:active,
 .btn-toolbar .btn.btn-primary.active {
-  background-color: rgba(0,89,175,1);
+  background-color: rgb(0, 0, 0);
 }
 
 /*************************************************
@@ -911,7 +936,7 @@ nav#navbar-main li {
 .navbar-default .navbar-brand {
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.5em;
   color: #2b2b2b;
 }
 
