@@ -59,6 +59,7 @@ body {
   margin-top: 71px; /* Offset body content by navbar height. */
   padding-top: 0;
   counter-reset: captions;
+  
 }
 @media screen and (max-width: 1200px) { /* Match max-width of .nav-bar query. */
   body {
@@ -264,7 +265,7 @@ blockquote p:last-child {
 }
 
 .home-section:nth-of-type(even) {
-  background-color: rgb(240, 240, 247);
+  background-color: #eeeded;
 }
 
 @media screen and (max-width: 768px) {
@@ -349,6 +350,7 @@ blockquote p:last-child {
 
 ul.ul-interests li {
   font-size: 0.9rem;
+  margin-left: -2em;
 }
 
 ul.ul-edu {
@@ -357,7 +359,11 @@ ul.ul-edu {
 
 ul.ul-edu li {
   position: relative;
-  padding: 0px 15px 4px 3px;
+  padding: 10px 0 10px 55px;
+	list-style: none;	
+	background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 30px;
 }
 
 ul.ul-edu li .description p {
@@ -365,7 +371,7 @@ ul.ul-edu li .description p {
 }
 
 ul.ul-edu li .description p.course {
-  font-size: 0.9rem;
+  font-size: 1.0rem;
 }
 
 ul.ul-edu li .description p.institution {
@@ -897,8 +903,8 @@ footer a#back_to_top i {
 }
 
 .navbar-default {
-  background: #fff;
-  box-shadow: 0 0.125rem 0.25rem 0 rgba(0,0,0,.11)
+  background: rgba(255, 255, 255, 0.931);
+  box-shadow: 0 0.125rem 1rem 0 rgba(0, 0, 0, 0.295);
 }
 
 nav#navbar-main li {
@@ -931,6 +937,10 @@ nav#navbar-main li {
   padding-bottom: 10px;
 }
 
+.navbar-fixed-top .nav-item:hover {
+  transform: scale(1.05);
+}
+
 .dropdown-menu > li > a {
   display: block;
   padding: 3px 20px;
@@ -953,7 +963,7 @@ nav#navbar-main li {
 .navbar-default .navbar-brand {
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 1.7em;
   color: #2b2b2b;
 }
 
