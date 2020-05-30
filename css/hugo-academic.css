@@ -685,6 +685,7 @@ article {
   background: #fff;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   transition: all 0.2s ease-out;
+  border-radius: 1%;
 }
 
 .card .card-image {
@@ -694,7 +695,7 @@ article {
 }
 
 .card h4 {
-  font-size: 0.9rem;
+  font-size: 1.0em;
   font-weight: 700;
   line-height: 1.5;
   text-transform: uppercase;
@@ -716,7 +717,7 @@ article {
 }
 
 .card .card-text p {
-  color: #999999;
+  color: #666565;
   font-size: 0.75rem;
 }
 
