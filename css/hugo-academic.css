@@ -227,7 +227,7 @@ blockquote p:last-child {
     margin: auto 0; /* Gives that scrolling effect as the typing happens */
     letter-spacing: .08em; /* Adjust as needed */
     animation: 
-      typing 3.0s steps(40, end),
+      typing 4.0s steps(100, end),
       blink-caret .55s step-end infinite;
   }
   
@@ -480,6 +480,7 @@ article {
 
 .article-title {
   font-size: 1.75rem;
+  text-align: center;
 }
 
 .article-title a {
