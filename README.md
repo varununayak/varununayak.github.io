@@ -4,4 +4,4 @@ The repository for the public code of my personal homepage **https://varununayak
 
 All the code is public under the **MIT** license. 
 
-Credits and thanks to **https://karttikeya.github.io/** and **https://asharalam11.github.io/**
+Credits and thanks to **https://varunnayak.github.io/** and **https://asharalam11.github.io/**
