@@ -119,9 +119,6 @@
         // Get all mermaid elements that haven't been rendered yet
         const mermaidDivs = document.querySelectorAll('.mermaid:not([data-processed])');
 
-        // Valid Mermaid diagram types
-        const validDiagramStarts = ['graph ', 'graph\n', 'flowchart ', 'sequenceDiagram', 'classDiagram', 'stateDiagram', 'erDiagram', 'gantt', 'pie', 'gitGraph'];
-
         // Process each one manually
         mermaidDivs.forEach(async (div, index) => {
             // Mark as processed immediately to prevent double-rendering
@@ -130,11 +127,9 @@
             const graphDefinition = div.textContent.trim();
             const id = `mermaid-graph-${Date.now()}-${index}`;
 
-            // Check if this looks like valid Mermaid syntax (not already rendered SVG/CSS)
-            const isValidMermaid = validDiagramStarts.some(start => graphDefinition.startsWith(start));
-
-            if (!isValidMermaid) {
-                console.warn(`Skipping mermaid div ${index}: content doesn't start with valid diagram type. First 50 chars:`, graphDefinition.substring(0, 50));
+            // Skip if content looks like CSS (already rendered) or is empty
+            if (!graphDefinition || graphDefinition.startsWith('#mermaid') || graphDefinition.startsWith('<')) {
+                console.warn(`Skipping mermaid div ${index}: looks like already rendered content`);
                 return;
             }
 
@@ -143,6 +138,7 @@
                 div.innerHTML = svg;
             } catch (error) {
                 console.error('Mermaid rendering error for diagram', index, ':', error);
+                console.error('Diagram definition was:', graphDefinition.substring(0, 200));
                 div.innerHTML = `<pre style="color: red;">Mermaid Error: ${error.message}</pre>`;
             }
         });
