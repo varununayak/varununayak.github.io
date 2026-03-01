@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotionOrchestrator: Temporal Multi-Robot Coordination</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" class="password-overlay">
+        <div class="password-box">
+            <h2>Password Protected</h2>
+            <p>Please enter the password to view this presentation.</p>
+            <input type="password" id="password-input" placeholder="Enter password" autofocus>
+            <button id="password-submit">Submit</button>
+            <p id="password-error" class="password-error"></p>
+        </div>
+    </div>
+
+    <div class="presentation" id="presentation-content" style="display: none;">
+        <!-- Progress Indicator -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="slide-counter">
+            <span class="current-slide">1</span> / <span class="total-slides">12</span>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-controls">
+            <button class="nav-btn prev-btn" aria-label="Previous slide">&larr;</button>
+            <button class="nav-btn next-btn" aria-label="Next slide">&rarr;</button>
+        </div>
+
+        <!-- Speaker Notes Panel -->
+        <div class="speaker-notes-panel hidden">
+            <div class="speaker-notes-header">
+                <span>Speaker Notes</span>
+                <button class="close-notes">&times;</button>
+            </div>
+            <div class="speaker-notes-content"></div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="slides-container">
+
+            <!-- Slide 1: Title -->
+            <section class="slide active" data-slide="1">
+                <div class="slide-content title-slide">
+                    <h1 class="main-title">MotionOrchestrator</h1>
+                    <h2 class="subtitle">Temporal Coordination for Multi-Robot Systems</h2>
+                    <div class="author">
+                        <p><strong>Varun | Dexterity Robotics</strong></p>
+                        <p class="tagline"><em>Solving the Multi-Robot Coordination Challenge</em></p>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Welcome everyone, thank you for your time</li>
+                        <li>Today I'll walk through MotionOrchestrator - our system for coordinating multiple robots in shared workspaces</li>
+                        <li>We'll cover the problem, our temporal approach, and how we achieved 40% throughput improvement while maintaining zero collisions</li>
+                        <li>Technical context: Python planning service interfacing with Inugami C++ runtime via gRPC</li>
+                    </ul>
+                    <p class="timing">Timing: 1 minute</p>
+                </div>
+            </section>
+
+            <!-- Slide 2: About Me -->
+            <section class="slide" data-slide="2">
+                <div class="slide-content">
+                    <h2>About Me</h2>
+
+                    <div class="about-me-container">
+                        <div class="about-header">
+                            <h3>Varun Nayak</h3>
+                            <p class="role">Senior Robotics Engineer</p>
+                            <p class="company">Dexterity.ai | Warehouse Robotics</p>
+                            <p class="summary">6 years of experience developing applications, physical AI, and software infrastructure for complex robotic systems</p>
+                        </div>
+
+                        <div class="about-columns">
+                            <div class="about-section">
+                                <h4>Education</h4>
+                                <ul>
+                                    <li><strong>M.S. Robotics</strong> - Stanford University (2020)</li>
+                                    <li><strong>B.S. Mechanical Engineering</strong> - BITS Pilani, India (2018)</li>
+                                </ul>
+                            </div>
+
+                            <div class="about-section">
+                                <h4>At Dexterity</h4>
+                                <ul>
+                                    <li>Architected robot applications, async orchestration frameworks, and sensor/actuator integration</li>
+                                    <li>Made major contributions to the simulation and test infrastructure for applications</li>
+                                    <li>Major contributions to multi-robot coordination, grasp & behavior planning</li>
+                                    <li>Developed core control & planning framework (Python/C++)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Brief introduction - keep it under 30 seconds</li>
+                        <li>Stanford Robotics background, worked with Dr. Oussama Khatib</li>
+                        <li>At Dexterity since 2020, promoted to Senior in 2022</li>
+                        <li>Focus on motion planning, multi-robot coordination, and simulation</li>
+                    </ul>
+                    <p class="timing">Timing: 30 seconds</p>
+                </div>
+            </section>
+
+            <!-- Slide 3: Problem Statement -->
+            <section class="slide" data-slide="3">
+                <div class="slide-content">
+                    <h2>The Multi-Robot Coordination Challenge</h2>
+
+                    <div class="problem-layout">
+                        <div class="problem-text">
+                            <div class="column">
+                                <h3>The Setup</h3>
+                                <ul>
+                                    <li><strong>Dual-arm robotic workcells</strong> with overlapping workspaces</li>
+                                    <li>Multiple robots must work simultaneously for throughput</li>
+                                    <li>Shared workspace creates collision risk</li>
+                                </ul>
+                            </div>
+                            <div class="column">
+                                <h3>Key Challenge</h3>
+                                <blockquote>How do we achieve concurrent motion while guaranteeing safety?</blockquote>
+                            </div>
+                        </div>
+                        <div class="problem-video">
+                            <video controls muted loop autoplay>
+                                <source src="assets/running-end-to-end-video-with-actual-robots.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <div class="tension-box">
+                        <div class="tension-item">
+                            <span class="tension-label safety">SAFETY</span>
+                            <span class="tension-desc">"Zero collisions"</span>
+                        </div>
+                        <div class="tension-arrow">&larr; TENSION &rarr;</div>
+                        <div class="tension-item">
+                            <span class="tension-label throughput">THROUGHPUT</span>
+                            <span class="tension-desc">"Maximize PPH"</span>
+                        </div>
+                    </div>
+                    <p class="naive-solution">Naive solution: one robot at a time (safe but ~40% slower)</p>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Picture two robot arms on an assembly line - they frequently need to reach into the same workspace</li>
+                        <li>The naive solution is sequential execution: Robot A completes, then Robot B starts. Safe, but we measured ~40% throughput loss</li>
+                        <li>A collision is catastrophic: hardware damage ($50K+), production halt, safety incidents</li>
+                        <li>The core question: can we prove mathematically that two trajectories won't collide, and if so, run them concurrently?</li>
+                        <li>Technical context: Each robot has 6-7 DOF, trajectories are 2-8 seconds, collision checks must be under 1ms</li>
+                    </ul>
+                    <p class="key-point">"This isn't just an engineering problem - it's a business problem. Every second a robot waits is money lost."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 4: Requirements & Existing Infrastructure -->
+            <section class="slide" data-slide="4">
+                <div class="slide-content">
+                    <h2>Requirements & Starting Point</h2>
+
+                    <div class="two-column">
+                        <div class="column">
+                            <h3>Requirements</h3>
+                            <ul class="requirements-list">
+                                <li><strong>Zero tolerance to collisions</strong> - especially between the two robots</li>
+                                <li><strong>Real-time response</strong> - handle unhappy path scenarios (trajectory deviations, scene changes like a box falling, etc.)</li>
+                                <li><strong>Improve dual robot utilization</strong> - positively impacting system throughput</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h3>Existing Infrastructure</h3>
+                            <ul class="existing-infra">
+                                <li><strong>Collision checking</strong> - FCL-based geometry checks</li>
+                                <li><strong>Motion planning</strong> - OMPL path planner</li>
+                                <li><strong>Velocity profiling</strong> - TOPPRA time parameterization</li>
+                                <li><strong>Inugami runtime</strong> - C++ real-time controller</li>
+                            </ul>
+                            <div class="infra-gap">
+                                <strong>Initial Coordination:</strong> Bare-bones "spatial lock" - each robot acquired exclusive access to entire pick/place region, effectively serializing the arms.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Zero collisions is non-negotiable - we treat this as a hard constraint, not an optimization target</li>
+                        <li>Real-time means decisions within 10ms for the control loop - we use async planning to avoid blocking</li>
+                        <li>We already had solid per-robot infrastructure: collision checking with FCL, OMPL for path planning, TOPPRA for velocity profiling</li>
+                        <li>Inugami is our C++ robot control runtime - handles real-time servo control, trajectory execution, and safety monitoring</li>
+                        <li>The key gap: all these components worked independently per robot - there was no component that explicitly coordinated two robots or made them aware of each other</li>
+                    </ul>
+                    <p class="key-point">"We designed for the hard requirements first, then optimized for throughput."</p>
+                    <p class="timing">Timing: 1 minute</p>
+                </div>
+            </section>
+
+            <!-- Slide 4: Design Philosophy & Core Insight -->
+            <section class="slide" data-slide="5">
+                <div class="slide-content">
+                    <h2>Design Philosophy & Core Insight</h2>
+
+                    <div class="principles">
+                        <h3>Guiding Principles</h3>
+                        <ol>
+                            <li><strong>Separation of Concerns</strong> - Planning vs Execution vs Monitoring</li>
+                            <li><strong>Temporal Awareness</strong> - Time is a first-class dimension</li>
+                            <li><strong>Fail-Safe Behavior</strong> - When in doubt, stop safely</li>
+                        </ol>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3>The Core Insight</h3>
+                        <div class="comparison">
+                            <div class="approach spatial">
+                                <span class="approach-label">SPATIAL-ONLY</span>
+                                <p>"Will these paths <strong>EVER</strong> occupy the same space?"</p>
+                                <p class="result">&rarr; If yes, block entirely</p>
+                            </div>
+                            <div class="approach temporal">
+                                <span class="approach-label">TEMPORAL</span>
+                                <p>"Will they occupy the same space <strong>AT THE SAME TIME</strong>?"</p>
+                                <p class="result">&rarr; If no, proceed concurrently</p>
+                            </div>
+                        </div>
+                        <p class="analogy">Like traffic intersections: cars cross the same point, just not simultaneously.</p>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>The key realization: two robots can traverse the same point in space, as long as they don't do it at the same time</li>
+                        <li>This seems obvious in hindsight, but implementing it correctly requires careful handling of timing and validation</li>
+                        <li>Spatial-only approaches block the entire "swept volume" for the full trajectory duration</li>
+                        <li>Our temporal approach uses TOPPRA time parameterization to know exactly where each robot will be at any given time</li>
+                        <li>We sample trajectories at 0.1s intervals and compare: "At t=2.3s, where is Robot A? Where is Robot B? Do they overlap?"</li>
+                    </ul>
+                    <p class="key-point">"We went from blocking space to blocking space-TIME. Time is now a first-class dimension."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 5: High-Level Architecture -->
+            <section class="slide" data-slide="6">
+                <div class="slide-content">
+                    <h2>High-Level Architecture</h2>
+
+                    <div class="dual-diagram">
+                        <div class="mermaid">graph TB
+    subgraph Application["Application Layer"]
+        App["Task Planner"]
+    end
+    subgraph Planning["Planning Layer - Python"]
+        MO["MotionOrchestrator"]
+        CS["CollisionScene"]
+        PP["PathPlanner"]
+        TG["TrajectoryGenerator"]
+        TV["TemporalValidator"]
+    end
+    subgraph Core["Core Services - C++"]
+        IG["Inugami Runtime"]
+        CM["CollisionMonitor"]
+        RC["Robot Controller"]
+    end
+    subgraph HW["Hardware"]
+        R1["Robot Arm 1"]
+        R2["Robot Arm 2"]
+    end
+    App --> MO
+    MO --> CS
+    MO --> PP
+    MO --> TG
+    MO --> TV
+    MO --> IG
+    IG --> CM
+    IG --> RC
+    RC --> R1
+    RC --> R2
+    style MO fill:#e1f5fe,color:#000
+    style TV fill:#e8f5e9,color:#000
+    style CM fill:#fff3e0,color:#000</div>
+
+                        <div class="architecture-image">
+                            <img src="assets/mo_high_level_architecture.png" alt="MotionOrchestrator High-Level Architecture">
+                        </div>
+                    </div>
+
+                    <div class="layer-responsibilities">
+                        <div class="layer"><strong>Application:</strong> What to do (pick object A, place at B)</div>
+                        <div class="layer"><strong>Planning:</strong> How to do it safely (paths, trajectories, coordination)</div>
+                        <div class="layer"><strong>Control:</strong> Execute reliably (real-time control, safety monitoring)</div>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Three-layer architecture with clear separation of concerns</li>
+                        <li>Planning layer is Python for rapid iteration - we can update planning logic without recompiling the runtime</li>
+                        <li>Core services are C++ for real-time guarantees - the CollisionMonitor runs at 100Hz with hard timing requirements</li>
+                        <li>Key components:
+                            <ul>
+                                <li><strong>CollisionScene</strong>: Maintains world model with robot meshes, obstacles, and active swept volumes</li>
+                                <li><strong>PathPlanner</strong>: Uses OMPL (Open Motion Planning Library) for sampling-based planning</li>
+                                <li><strong>TrajectoryGenerator</strong>: TOPPRA algorithm for time-optimal trajectory generation</li>
+                                <li><strong>TemporalValidator</strong>: Our innovation - validates trajectories considering time, not just space</li>
+                            </ul>
+                        </li>
+                        <li>Communication: Planning → Runtime uses gRPC with protobuf; Runtime → Planning uses async callbacks for progress updates</li>
+                    </ul>
+                    <p class="key-point">"Each layer can fail independently without compromising safety."</p>
+                    <p class="timing">Timing: 2 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 6: Trajectory Swept Volume -->
+            <section class="slide" data-slide="7">
+                <div class="slide-content">
+                    <h2>Trajectory Swept Volume: Time Parameterization</h2>
+
+                    <h3>From Path to Timed Trajectory</h3>
+                    <div class="mermaid">graph LR
+    subgraph Input["Path - no timing"]
+        P["Joint waypoints"]
+    end
+    subgraph TOPPRA["TOPPRA Algorithm"]
+        T["Time-Optimal Parameterization"]
+    end
+    subgraph Output["Trajectory - with timing"]
+        O["Time-stamped waypoints"]
+    end
+    P --> T --> O</div>
+
+                    <div class="path-detail">
+                        <div class="path-box input-path">
+                            <strong>Input:</strong> q₀ → q₁ → q₂ → ... → qₙ
+                        </div>
+                        <div class="path-box output-path">
+                            <strong>Output:</strong> t=0.0s: q₀ | t=0.3s: q₁ | t=0.7s: q₂ | ... | t=N: qₙ
+                        </div>
+                    </div>
+
+                    <h3>TrajectorySweptVolume: Time-Based Collision Entities</h3>
+                    <pre><code class="language-python">class TrajectorySweptVolume:
+    def __init__(self, robot_collision_set, trajectory_data, time_step=0.1):
+        # Sample at fixed time intervals using TOPPRA's reparameterized spline
+        time_splits = [0.0, 0.1, 0.2, ..., duration]
+
+        for t in time_splits:
+            # Get exact joint angles at time t from TOPPRA spline
+            joint_angles = trajectory_data.continuous_path(t)
+            # Compute collision geometry at this configuration
+            entities[t] = robot_collision_set.collision_entities(joint_angles)</code></pre>
+
+                    <p class="result-type">This gives us: <code>dict[time_seconds, list[CollisionEntity]]</code></p>
+
+                    <div class="swept-volume-media">
+                        <div class="swept-volume-image">
+                            <img src="assets/swept_volume.png" alt="Swept Volume Visualization">
+                        </div>
+                        <div class="video-container small">
+                            <video controls muted loop>
+                                <source src="assets/swept_volume_video_illustration.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>TOPPRA (Time-Optimal Path Parameterization based on Reachability Analysis) is the key enabler</li>
+                        <li>Input: geometric path (sequence of joint configurations) with no timing</li>
+                        <li>Output: time-optimal trajectory respecting velocity (2 rad/s) and acceleration limits (5 rad/s²)</li>
+                        <li>The <code>reparameterized_spline</code> gives us a continuous function: time → joint angles</li>
+                        <li>We sample this at 0.1s intervals (configurable via <code>TEMPORAL_ORCHESTRATION_TIME_STEP</code>)</li>
+                        <li>At each time sample, we compute the robot's collision geometry using forward kinematics</li>
+                        <li>Result: a dictionary mapping absolute time (seconds) to collision entities</li>
+                        <li>This is fundamentally different from progress-based sampling - we know exactly where the robot is at each moment in time</li>
+                    </ul>
+                    <p class="key-point">"TOPPRA gives us the time dimension. We know where the robot will be at t=2.3 seconds."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 7: Temporal Collision Validation -->
+            <section class="slide" data-slide="8">
+                <div class="slide-content">
+                    <h2>Temporal Collision Validation</h2>
+
+                    <p class="slide-intro">This algorithm determines how long robot A should wait before starting its trajectory, given that robot B is currently executing a time-parameterized trajectory.</p>
+
+                    <h3>The Algorithm</h3>
+                    <pre><code class="language-python">def collision_check_trajectories_based_on_expected_states_at_time(
+    robot_a_entities_at_time: dict[float, list[Entity]],  # {t: entities}
+    robot_b_entities_at_time: dict[float, list[Entity]],  # {t: entities}
+    wait_time: float = 0.0,
+    lookahead_safety_time: float = 0.2,  # 200ms buffer
+):
+    for t_a, entities_a in robot_a_entities_at_time.items():
+        for t_b, entities_b in robot_b_entities_at_time.items():
+            # KEY: Only check if Robot B will still be at this position
+            # when Robot A arrives (accounting for wait_time offset)
+            if t_b <= (t_a + wait_time - lookahead_safety_time):
+                continue  # Robot B will have moved past this point
+
+            if collision(entities_a, entities_b):
+                return COLLISION
+
+    return SAFE</code></pre>
+
+                    <div class="wait-time-box">
+                        <h3>Wait Time Calculation</h3>
+                        <p>If collision detected, increment <code>wait_time</code> by 0.1s and retry until:</p>
+                        <ul>
+                            <li>No collision → Robot A waits, then proceeds</li>
+                            <li><code>wait_time > 5s</code> → Fall back to sequential execution</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>This is the core temporal validation algorithm</li>
+                        <li>For each time sample in Robot A's trajectory, we check against Robot B's remaining trajectory</li>
+                        <li>The key insight: if <code>t_b <= t_a + wait_time</code>, Robot B will have already passed that point when Robot A arrives</li>
+                        <li>The 200ms <code>lookahead_safety_time</code> adds a safety buffer for timing uncertainty</li>
+                        <li>Wait time calculation: if there's a collision at t=2s, we try wait_time=0.1s, 0.2s, etc.</li>
+                        <li>Maximum wait time of 5s (<code>TEMPORAL_ORCHESTRATION_MAX_WAIT_TIME</code>) - beyond this, we fall back to blocking</li>
+                        <li>The function returns the required wait time, which is then applied before committing Robot A's trajectory</li>
+                        <li>Constants from code: <code>TEMPORAL_ORCHESTRATION_LOOKAHEAD_SAFETY_TIME = 0.2</code>, <code>TEMPORAL_ORCHESTRATION_TIME_STEP = 0.1</code></li>
+                    </ul>
+                    <p class="key-point">"We compute exactly how long Robot A needs to wait for Robot B to clear the overlap zone."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 9: Collision Monitor - Safety Layer -->
+            <section class="slide" data-slide="9">
+                <div class="slide-content">
+                    <h2>Collision Monitor - Safety Layer</h2>
+
+                    <div class="dual-diagram">
+                        <div class="mermaid">graph TB
+    subgraph Planning["Planning Time - Python"]
+        V1["PathPlanner"]
+        V2["TemporalValidator"]
+    end
+    subgraph Runtime["Runtime - C++"]
+        V3["CollisionMonitor 100Hz"]
+        V4["Emergency Stop"]
+    end
+    V1 --> V2
+    V2 --> V3
+    V3 --> V4
+    style V3 fill:#fff3e0,color:#000
+    style V4 fill:#ffcdd2,color:#000</div>
+
+                        <div class="implementation-image">
+                            <img src="assets/mo_implementation_blocks.png" alt="Implementation Blocks - Defense in Depth">
+                        </div>
+                    </div>
+
+                    <h3>C++ CollisionMonitor: Real-Time Swept Volume Checking</h3>
+                    <pre><code class="language-cpp">// From collision_monitor.cc - runs at 100Hz
+CollisionCheckResult CheckCollisionFree(double current_progress, double current_speed) {
+    // Compute velocity-based lookahead (400ms ahead)
+    LookaheadResult lookahead = ComputeLookahead(current_progress, current_speed);
+
+    // Update own swept volume window [current, current + lookahead]
+    UpdateSelfSweptVolumeWindow(current_progress, lookahead.safe_progress);
+
+    // Check against partner's swept volume (also windowed by their progress)
+    collision_free = swept_volume_set_->IsCollisionFree(*other_swept_set);
+}</code></pre>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Defense in depth: we don't trust any single layer to guarantee safety</li>
+                        <li><strong>Planning layer (Python)</strong>: PathPlanner validates collision-free paths; TemporalValidator validates multi-robot timing</li>
+                        <li><strong>Runtime layer (C++)</strong>: CollisionMonitor runs at 100Hz in a real-time thread (SCHED_FIFO priority)</li>
+                        <li>The C++ CollisionMonitor uses the same swept volume concept but with velocity-based lookahead:
+                            <ul>
+                                <li><code>kLookaheadTime = 0.4</code> seconds ahead</li>
+                                <li>Computes <code>lookahead_distance = current_speed * 0.4s + safety_buffer</code></li>
+                                <li>Uses <code>MultiPoseArticulatedBodyCollisionSet</code> for efficient windowed collision checking</li>
+                            </ul>
+                        </li>
+                        <li>Key optimization: <code>UpdateWindow()</code> takes ~1-2µs vs ~275µs for rebuilding the collision set</li>
+                        <li>If collision predicted: triggers controlled deceleration to safe stop</li>
+                        <li>Hardware E-Stop: Physical button, completely independent of software, cuts motor power</li>
+                    </ul>
+                    <p class="key-point">"The CollisionMonitor doesn't trust the planner. It verifies independently at 100Hz using the same temporal swept volume concept."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 10: Key Challenges & Solutions -->
+            <section class="slide" data-slide="10">
+                <div class="slide-content">
+                    <h2>Additional Challenges & Solutions</h2>
+
+                    <div class="challenges">
+                        <div class="challenge">
+                            <h3>Challenge 1: Trajectory Segment Handling</h3>
+                            <div class="challenge-content">
+                                <p><strong>Problem:</strong> Trajectories have ingress/keypoints/egress segments with different safety needs</p>
+                                <p><strong>Solution:</strong> Split trajectory swept volume by segment, validate each separately</p>
+                            </div>
+                            <pre><code class="language-python">ingress_dict, keypoints_dict, egress_dict = split_trajectory_swept_volume_by_segments(
+    trajectory_swept_volume,
+    ingress_joint_path, keypoints_joint_path, egress_joint_path
+)
+# Check each segment with appropriate collision scenes</code></pre>
+                        </div>
+
+                        <div class="challenge">
+                            <h3>Challenge 2: Deadlock Prevention</h3>
+                            <div class="challenge-content">
+                                <p><strong>Problem:</strong> Both robots could end up waiting for each other indefinitely</p>
+                                <p><strong>Solution:</strong> Maximum wait time threshold (5s) - if exceeded, fall back to sequential execution to guarantee progress</p>
+                            </div>
+                            <pre><code class="language-python"># If wait_time exceeds threshold, fall back to safe sequential mode
+if wait_time > TEMPORAL_ORCHESTRATION_MAX_WAIT_TIME:  # 5.0 seconds
+    return FALLBACK_TO_SEQUENTIAL</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li><strong>Segment handling</strong>: SE3 trajectories have three parts:
+                            <ul>
+                                <li>Ingress: approach to workspace (checked with deflated payload)</li>
+                                <li>Keypoints: main manipulation (full collision checking)</li>
+                                <li>Egress: retreat from workspace (checked with deflated payload)</li>
+                            </ul>
+                            <code>split_trajectory_swept_volume_by_segments()</code> uses path distance fractions to divide the time-split volumes
+                        </li>
+                        <li><strong>Deadlock prevention</strong>: If temporal validation cannot find a valid wait time within 5 seconds, we fall back to the original spatial lock approach - safe but slower</li>
+                        <li><strong>Feature flag</strong>: <code>commit_with_temporal_orchestration</code> on trajectory strategy enables/disables per-trajectory</li>
+                    </ul>
+                    <p class="key-point">"The algorithm was 20% of the work. The edge cases were 80%."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 11: Results & Impact -->
+            <section class="slide" data-slide="11">
+                <div class="slide-content">
+                    <h2>Results & Impact</h2>
+
+                    <h3>Performance Metrics</h3>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Before (Sequential)</th>
+                                <th>After (Temporal)</th>
+                                <th>Improvement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>System Throughput</td>
+                                <td>Baseline</td>
+                                <td>+40%</td>
+                                <td class="improvement">+40%</td>
+                            </tr>
+                            <tr>
+                                <td>Robot Wait Time</td>
+                                <td>Baseline</td>
+                                <td>-60%</td>
+                                <td class="improvement">-60%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="results-summary">
+                        <div class="before-after">
+                            <div class="before">
+                                <strong>BEFORE:</strong> Robots took turns → 40% of potential throughput lost
+                            </div>
+                            <div class="after">
+                                <strong>AFTER:</strong> Temporal coordination → Improved dual robot utilization
+                            </div>
+                            <div class="impact">
+                                <strong>At scale:</strong> 40% more picks/day = significant revenue impact
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Demo -->
+                    <div class="video-container">
+                        <video controls>
+                            <source src="assets/running-end-to-end-video-with-actual-robots.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p class="video-caption">Video Demo: Dual-arm coordination with temporal orchestration</p>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>The headline number: 40% improvement in system throughput compared to sequential execution</li>
+                        <li>This is measured as Picks Per Hour (PPH) in production workloads</li>
+                        <li>Wait time reduction of 60% means robots spend much more time doing useful work</li>
+                        <li>Zero collisions maintained - the temporal validation plus runtime CollisionMonitor catch all issues</li>
+                        <li>Why "only" 40% and not 100%?
+                            <ul>
+                                <li>Some operations genuinely require exclusive access (both robots need same exact spot)</li>
+                                <li>Task dependencies (Robot B needs Robot A to place something first)</li>
+                                <li>Maximum 5s wait time before falling back to sequential</li>
+                                <li>Theoretical maximum with perfect scheduling would be ~50-55% improvement</li>
+                            </ul>
+                        </li>
+                        <li>The remaining gap is in task-level scheduling, not motion coordination</li>
+                    </ul>
+                    <p class="key-point">"40% more throughput with zero hardware changes. Pure software improvement."</p>
+                    <p class="timing">Timing: 1.5 minutes</p>
+                </div>
+            </section>
+
+            <!-- Slide 12: Key Takeaways & Q&A -->
+            <section class="slide" data-slide="12">
+                <div class="slide-content">
+                    <h2>Key Takeaways & Q&A</h2>
+
+                    <div class="two-column-takeaways">
+                        <div class="takeaways-box">
+                            <h3>KEY TAKEAWAYS</h3>
+                            <div class="takeaway">
+                                <span class="takeaway-num">1</span>
+                                <div class="takeaway-content">
+                                    <strong>ACCOUNT FOR BOTH SPACE AND TIME</strong>
+                                    <p>TOPPRA gives us time parameterization → temporal validation</p>
+                                </div>
+                            </div>
+                            <div class="takeaway">
+                                <span class="takeaway-num">2</span>
+                                <div class="takeaway-content">
+                                    <strong>DEFENSE IN DEPTH</strong>
+                                    <p>Python validation + C++ CollisionMonitor at 100Hz</p>
+                                </div>
+                            </div>
+                            <div class="takeaway">
+                                <span class="takeaway-num">3</span>
+                                <div class="takeaway-content">
+                                    <strong>RESULTS</strong>
+                                    <p>40% throughput gain, zero collisions</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contributions-box">
+                            <h3>MY CONTRIBUTIONS</h3>
+                            <div class="contribution">
+                                <span class="contribution-icon">&#9733;</span>
+                                <div class="contribution-content">
+                                    <strong>System Architecture Owner</strong>
+                                    <p>Designed the overall temporal orchestration architecture</p>
+                                </div>
+                            </div>
+                            <div class="contribution">
+                                <span class="contribution-icon">&#10004;</span>
+                                <div class="contribution-content">
+                                    <strong>Python Implementation</strong>
+                                    <p>Implemented the entire Python orchestration layer (MotionOrchestrator, TemporalValidator, TrajectorySweptVolume)</p>
+                                </div>
+                            </div>
+                            <div class="contribution">
+                                <span class="contribution-icon">&#10004;</span>
+                                <div class="contribution-content">
+                                    <strong>C++ Contributions</strong>
+                                    <p>Implemented parts of the C++ CollisionMonitor integration</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qa-section">
+                        <h2>Questions?</h2>
+                    </div>
+
+                    <div class="patent-info">
+                        <span class="patent-label">Patent:</span>
+                        <a href="https://patents.google.com/patent/US20240228191A1/en" target="_blank" rel="noopener">
+                            US20240228191A1 - Temporal Multi-Robot Coordination
+                        </a>
+                    </div>
+                </div>
+                <div class="speaker-notes" hidden>
+                    <ul>
+                        <li>Key technical insight: TOPPRA's time parameterization is the foundation - it gives us <code>time → joint_angles</code></li>
+                        <li>Dual representation: progress (ground truth from hardware) + time (from trajectory) work together</li>
+                        <li>Defense in depth at both planning and runtime layers using the same temporal swept volume concept</li>
+                        <li>Future work:
+                            <ul>
+                                <li>Extend to N-robot coordination (currently optimized for 2)</li>
+                                <li>ML-based trajectory prediction for better temporal estimates</li>
+                                <li>Adaptive safety margins based on confidence</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p class="key-point">"Temporal reasoning turned a blocking problem into a scheduling problem."</p>
+                    <p class="timing">Timing: 1 minute + Q&A</p>
+                </div>
+            </section>
+
+        </div><!-- End slides-container -->
+
+    </div><!-- End presentation -->
+
+    <script src="script.js"></script>
+</body>
+</html>
