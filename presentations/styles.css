@@ -1151,10 +1151,10 @@ p code, li code, td code {
 .architecture-image img,
 .implementation-image img,
 .swept-volume-image img {
-    max-width: 100%;
-    max-height: 45vh;
+    width: 100%;
     height: auto;
     border-radius: 8px;
+    /* Remove max-height to allow proper scaling with browser zoom */
 }
 
 /* ===== Mermaid Diagrams ===== */
@@ -1170,9 +1170,11 @@ p code, li code, td code {
 }
 
 .mermaid-diagram img {
-    max-width: 100%;
-    max-height: 40vh;
+    width: 100%;
+    max-width: 700px;
     height: auto;
+    /* Ensure SVGs scale with browser zoom */
+    transform-origin: center center;
 }
 
 /* ===== Hidden Speaker Notes ===== */
