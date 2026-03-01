@@ -116,20 +116,34 @@
             }
         });
 
-        // Get all mermaid elements
-        const mermaidDivs = document.querySelectorAll('.mermaid');
+        // Get all mermaid elements that haven't been rendered yet
+        const mermaidDivs = document.querySelectorAll('.mermaid:not([data-processed])');
+
+        // Valid Mermaid diagram types
+        const validDiagramStarts = ['graph ', 'graph\n', 'flowchart ', 'sequenceDiagram', 'classDiagram', 'stateDiagram', 'erDiagram', 'gantt', 'pie', 'gitGraph'];
 
         // Process each one manually
         mermaidDivs.forEach(async (div, index) => {
+            // Mark as processed immediately to prevent double-rendering
+            div.setAttribute('data-processed', 'true');
+
             const graphDefinition = div.textContent.trim();
-            const id = `mermaid-graph-${index}`;
+            const id = `mermaid-graph-${Date.now()}-${index}`;
+
+            // Check if this looks like valid Mermaid syntax (not already rendered SVG/CSS)
+            const isValidMermaid = validDiagramStarts.some(start => graphDefinition.startsWith(start));
+
+            if (!isValidMermaid) {
+                console.warn(`Skipping mermaid div ${index}: content doesn't start with valid diagram type. First 50 chars:`, graphDefinition.substring(0, 50));
+                return;
+            }
 
             try {
                 const { svg } = await mermaid.render(id, graphDefinition);
                 div.innerHTML = svg;
             } catch (error) {
-                console.error('Mermaid rendering error:', error);
-                div.innerHTML = `<pre style="color: red;">Mermaid Error: ${error.message}\n\nCode:\n${graphDefinition}</pre>`;
+                console.error('Mermaid rendering error for diagram', index, ':', error);
+                div.innerHTML = `<pre style="color: red;">Mermaid Error: ${error.message}</pre>`;
             }
         });
     }
