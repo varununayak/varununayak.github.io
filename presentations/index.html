@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MotionOrchestrator: Temporal Multi-Robot Coordination</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <!-- Password Protection Overlay -->
@@ -134,7 +133,7 @@
                         </div>
                         <div class="problem-video">
                             <video controls muted loop autoplay>
-                                <source src="assets/running-end-to-end-video-with-actual-robots.mp4" type="video/mp4">
+                                <source src="assets/running-end-to-end.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
@@ -257,39 +256,9 @@
                     <h2>High-Level Architecture</h2>
 
                     <div class="dual-diagram">
-                        <div class="mermaid">graph TB
-    subgraph Application["Application Layer"]
-        App["Task Planner"]
-    end
-    subgraph Planning["Planning Layer - Python"]
-        MO["MotionOrchestrator"]
-        CS["CollisionScene"]
-        PP["PathPlanner"]
-        TG["TrajectoryGenerator"]
-        TV["TemporalValidator"]
-    end
-    subgraph Core["Core Services - C++"]
-        IG["Inugami Runtime"]
-        CM["CollisionMonitor"]
-        RC["Robot Controller"]
-    end
-    subgraph HW["Hardware"]
-        R1["Robot Arm 1"]
-        R2["Robot Arm 2"]
-    end
-    App --> MO
-    MO --> CS
-    MO --> PP
-    MO --> TG
-    MO --> TV
-    MO --> IG
-    IG --> CM
-    IG --> RC
-    RC --> R1
-    RC --> R2
-    style MO fill:#e1f5fe,color:#000
-    style TV fill:#e8f5e9,color:#000
-    style CM fill:#fff3e0,color:#000</div>
+                        <div class="mermaid-diagram">
+                            <img src="assets/diagram1-architecture.svg" alt="High-Level Architecture Diagram">
+                        </div>
 
                         <div class="architecture-image">
                             <img src="assets/mo_high_level_architecture.png" alt="MotionOrchestrator High-Level Architecture">
@@ -328,17 +297,9 @@
                     <h2>Trajectory Swept Volume: Time Parameterization</h2>
 
                     <h3>From Path to Timed Trajectory</h3>
-                    <div class="mermaid">graph LR
-    subgraph Input["Path - no timing"]
-        P["Joint waypoints"]
-    end
-    subgraph TOPPRA["TOPPRA Algorithm"]
-        T["Time-Optimal Parameterization"]
-    end
-    subgraph Output["Trajectory - with timing"]
-        O["Time-stamped waypoints"]
-    end
-    P --> T --> O</div>
+                    <div class="mermaid-diagram">
+                        <img src="assets/diagram2-toppra.svg" alt="TOPPRA Algorithm Flow">
+                    </div>
 
                     <div class="path-detail">
                         <div class="path-box input-path">
@@ -448,20 +409,9 @@
                     <h2>Collision Monitor - Safety Layer</h2>
 
                     <div class="dual-diagram">
-                        <div class="mermaid">graph TB
-    subgraph Planning["Planning Time - Python"]
-        V1["PathPlanner"]
-        V2["TemporalValidator"]
-    end
-    subgraph Runtime["Runtime - C++"]
-        V3["CollisionMonitor 100Hz"]
-        V4["Emergency Stop"]
-    end
-    V1 --> V2
-    V2 --> V3
-    V3 --> V4
-    style V3 fill:#fff3e0,color:#000
-    style V4 fill:#ffcdd2,color:#000</div>
+                        <div class="mermaid-diagram">
+                            <img src="assets/diagram3-defense.svg" alt="Defense in Depth Diagram">
+                        </div>
 
                         <div class="implementation-image">
                             <img src="assets/mo_implementation_blocks.png" alt="Implementation Blocks - Defense in Depth">
@@ -599,7 +549,7 @@ if wait_time > TEMPORAL_ORCHESTRATION_MAX_WAIT_TIME:  # 5.0 seconds
                     <!-- Video Demo -->
                     <div class="video-container">
                         <video controls>
-                            <source src="assets/running-end-to-end-video-with-actual-robots.mp4" type="video/mp4">
+                            <source src="assets/running-end-to-end.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                         <p class="video-caption">Video Demo: Dual-arm coordination with temporal orchestration</p>

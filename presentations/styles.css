@@ -1158,19 +1158,20 @@ p code, li code, td code {
 }
 
 /* ===== Mermaid Diagrams ===== */
-.mermaid {
+.mermaid-diagram {
     background: var(--bg-secondary);
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px;
     margin: 20px 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     overflow-x: auto;
 }
 
-/* Override Mermaid styles for dark theme */
-.mermaid svg {
+.mermaid-diagram img {
     max-width: 100%;
+    max-height: 40vh;
     height: auto;
 }
 
