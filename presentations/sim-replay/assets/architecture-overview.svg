@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="950" height="750" viewBox="0 0 950 750" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.25"/>
+    </filter>
+    <marker id="arrowGrey" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowDash" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="950" height="750" fill="#0f1117" rx="12"/>
+
+  <!-- ==================== -->
+  <!-- Orchestration Layer (top-right) -->
+  <!-- ==================== -->
+  <rect x="540" y="20" width="390" height="230" rx="10" fill="rgba(255,255,200,0.06)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="6"/>
+  <text x="735" y="42" text-anchor="middle" fill="#fbbf24" font-size="12">Orchestration Layer</text>
+
+  <!-- SimOrchestrator -->
+  <rect x="620" y="52" width="220" height="50" rx="8" fill="#f87171" stroke="#f87171" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="730" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">SimOrchestrator</text>
+  <text x="730" y="90" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Manages lifecycle</text>
+
+  <!-- Plugins -->
+  <rect x="610" y="130" width="200" height="45" rx="8" fill="#2bbc8a" stroke="#2bbc8a" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="710" y="150" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Plugins</text>
+  <text x="710" y="165" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Lifecycle hooks</text>
+
+  <!-- SimContext -->
+  <rect x="830" y="170" width="90" height="55" rx="8" fill="#2196F3" stroke="#2196F3" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="875" y="193" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">SimContext</text>
+  <text x="875" y="208" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">Shared state</text>
+
+  <!-- Arrows: SimOrchestrator → Plugins -->
+  <line x1="680" y1="102" x2="680" y2="127" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="650" y="118" fill="#9aa0a6" font-size="9">callbacks</text>
+  <line x1="770" y1="102" x2="770" y2="127" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="775" y="118" fill="#9aa0a6" font-size="9">registers</text>
+
+  <!-- SimOrchestrator → SimContext -->
+  <line x1="840" y1="82" x2="870" y2="167" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="870" y="130" fill="#9aa0a6" font-size="9">provides</text>
+
+  <!-- Plugins → REST, Scene, SimContext -->
+  <line x1="630" y1="175" x2="530" y2="295" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="555" y="240" fill="#9aa0a6" font-size="9">call</text>
+  <line x1="710" y1="175" x2="660" y2="295" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="695" y="240" fill="#9aa0a6" font-size="9">call</text>
+  <line x1="810" y1="160" x2="830" y2="185" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="820" y="163" fill="#9aa0a6" font-size="9">use</text>
+
+  <!-- ==================== -->
+  <!-- REST Endpoints (middle) -->
+  <!-- ==================== -->
+  <rect x="390" y="270" width="340" height="80" rx="10" fill="rgba(255,255,200,0.06)" stroke="#6b7280" stroke-width="1" stroke-dasharray="6"/>
+  <text x="560" y="288" text-anchor="middle" fill="#9aa0a6" font-size="11">REST Endpoints</text>
+
+  <rect x="410" y="295" width="140" height="42" rx="6" fill="#78909C" stroke="#78909C" stroke-width="1" filter="url(#shadow)"/>
+  <text x="480" y="313" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">/remove-objects</text>
+  <text x="480" y="328" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">POST remove items</text>
+
+  <rect x="570" y="295" width="140" height="42" rx="6" fill="#78909C" stroke="#78909C" stroke-width="1" filter="url(#shadow)"/>
+  <text x="640" y="313" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">/scene-entities</text>
+  <text x="640" y="328" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9">GET scene data</text>
+
+  <!-- ==================== -->
+  <!-- Main Loop (~100Hz) -->
+  <!-- ==================== -->
+  <rect x="250" y="400" width="430" height="330" rx="10" fill="rgba(255,255,200,0.06)" stroke="#6b7280" stroke-width="1" stroke-dasharray="6"/>
+  <text x="465" y="418" text-anchor="middle" fill="#9aa0a6" font-size="12">Main Loop (~100 Hz)</text>
+
+  <!-- Scene -->
+  <rect x="370" y="430" width="200" height="50" rx="8" fill="#4CAF50" stroke="#4CAF50" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="470" y="452" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Scene</text>
+  <text x="470" y="468" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Contains all entities</text>
+
+  <!-- Entities -->
+  <rect x="480" y="520" width="180" height="50" rx="8" fill="#FF9800" stroke="#FF9800" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="570" y="542" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Entities</text>
+  <text x="570" y="558" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Objects with geometry &amp; pose</text>
+
+  <!-- Behaviors -->
+  <rect x="340" y="600" width="180" height="50" rx="8" fill="#7B1FA2" stroke="#7B1FA2" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="430" y="622" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">Behaviors</text>
+  <text x="430" y="638" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Update logic</text>
+
+  <!-- SceneEditor -->
+  <rect x="280" y="685" width="190" height="45" rx="8" fill="#8BC34A" stroke="#8BC34A" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="375" y="704" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">SceneEditor</text>
+  <text x="375" y="720" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Buffers scene edits</text>
+
+  <!-- Arrows inside Main Loop -->
+  <!-- Scene → contains → Entities -->
+  <line x1="520" y1="480" x2="555" y2="517" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="555" y="500" fill="#9aa0a6" font-size="9">contains</text>
+
+  <!-- Entities → have → Behaviors -->
+  <line x1="530" y1="570" x2="475" y2="597" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="520" y="590" fill="#9aa0a6" font-size="9">have</text>
+
+  <!-- 1. read entities: Scene → Behaviors -->
+  <line x1="380" y1="478" x2="390" y2="597" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="350" y="545" fill="#9aa0a6" font-size="9">1. read entities</text>
+
+  <!-- 2. call update: Behaviors → SceneEditor -->
+  <line x1="410" y1="650" x2="390" y2="682" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="420" y="672" fill="#9aa0a6" font-size="9">2. call update</text>
+
+  <!-- 3. apply edits: SceneEditor → Scene -->
+  <path d="M 310 685 Q 280 580 370 470" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+  <text x="275" y="570" fill="#9aa0a6" font-size="9">3. apply edits</text>
+
+  <!-- REST → Main Loop connections -->
+  <!-- /remove-objects → edits → Scene -->
+  <line x1="470" y1="337" x2="440" y2="427" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="430" y="385" fill="#9aa0a6" font-size="9">edits</text>
+
+  <!-- /scene-entities → reads from → Scene -->
+  <line x1="640" y1="337" x2="520" y2="427" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrowGrey)"/>
+  <text x="595" y="385" fill="#9aa0a6" font-size="9">reads from</text>
+
+  <!-- ==================== -->
+  <!-- Robot Application (bottom-left) -->
+  <!-- ==================== -->
+  <rect x="30" y="565" width="170" height="55" rx="8" fill="#37474F" stroke="#37474F" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="115" y="588" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Robot Application</text>
+  <text x="115" y="605" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">OneApp</text>
+
+  <!-- Robot Application → Behaviors (gRPC/DexBus) -->
+  <line x1="200" y1="595" x2="337" y2="618" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5" marker-end="url(#arrowDash)"/>
+  <text x="240" y="615" fill="#6b7280" font-size="9">gRPC/DexBus</text>
+
+  <!-- ==================== -->
+  <!-- Physics Sim (bottom-right) -->
+  <!-- ==================== -->
+  <rect x="740" y="520" width="180" height="55" rx="8" fill="#7B1FA2" stroke="#7B1FA2" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="830" y="543" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Physics Sim</text>
+  <text x="830" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">Optional gRPC service</text>
+
+  <!-- Scene ↔ Physics Sim -->
+  <line x1="570" y1="460" x2="737" y2="535" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5" marker-end="url(#arrowDash)"/>
+  <text x="680" y="490" fill="#6b7280" font-size="9">send entities</text>
+  <text x="680" y="503" fill="#6b7280" font-size="9">sync poses</text>
+
+</svg>

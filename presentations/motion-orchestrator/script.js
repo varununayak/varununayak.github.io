@@ -7,7 +7,7 @@
     'use strict';
 
     // ===== Password Protection =====
-    const PASSWORD = 'doordash';
+    const PASSWORD = 'intuitive';
     const passwordOverlay = document.getElementById('password-overlay');
     const presentationContent = document.getElementById('presentation-content');
     const passwordInput = document.getElementById('password-input');
