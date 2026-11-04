@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<!-- 
+                                        ________________________________________________________
+                                        |                                                       |
+                                        |       Well Hello! (^_^)                               |
+                                        |   I see you are looking at my code.                   |
+                                        |                                                       |
+                                        |   If you have any questions or would like to use      |
+                                        |   part of this code, please contact me at             |
+                                        |   varunnayak3101@gmail.com                            |
+                                        |                                                       |
+                                        |        Thanks,                                        |
+                                        |        Varun Nayak                                    |
+                                        |_______________________________________________________|
+ 
+-->
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.49" />
+  <meta name="author" content="Varun Nayak">
+  <meta name="description" content="Demystifying Vision-Language-Action (VLA) Models from First Principles">
+
+  <link rel="stylesheet" href="/css/highlight.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw=="
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css"
+    integrity="sha512-GGGNUPDhnG8LEAEDsjqYIQns+Gu8RBs4j5XGlxl7UfRaZBhCCm5jenJkeJL8uPuOXGqgl8/H1gjlWQDRjd3cUQ=="
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
+    crossorigin="anonymous">
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+  <link rel="stylesheet" href="/css/hugo-academic.css">
+
+  <link rel="alternate" href="https://varununayak.github.io/index.xml" type="application/rss+xml" title="Varun Nayak">
+  <link rel="feed" href="https://varununayak.github.io/index.xml" type="application/rss+xml" title="Varun Nayak">
+
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
+
+  <link rel="canonical" href="https://varununayak.github.io/blog/microvla/">
+
+  <title>microVLA: Vision-Language-Action Models from First Principles | Varun Nayak</title>
+
+  <style>
+    .article-container {
+      padding-top: 90px;
+      padding-bottom: 60px;
+    }
+    .article-style img.demo-gif {
+      margin-top: 28px;
+      margin-bottom: 32px;
+      border-radius: 6px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    .article-style pre {
+      background-color: #f6f8fa;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      overflow-x: auto;
+    }
+    .repo-callout {
+      background-color: #f8f9fa;
+      border-left: 4px solid #0095eb;
+      padding: 14px 18px;
+      margin: 24px 0;
+      font-size: 0.95rem;
+    }
+  </style>
+
+</head>
+
+<body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71">
+
+  <nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+          data-target=".navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Varun Nayak</a>
+      </div>
+
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="nav-item">
+            <a href="/#about">
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/project/index.html">
+              <span>Projects</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/blog/index.html">
+              <span>Blog</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://varununayak.github.io/pdf/cv.pdf">
+              <span>Resume</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <article class="article" itemscope itemtype="http://schema.org/Article">
+    <div class="article-container article-style">
+
+      <p style="margin-bottom: 15px;">
+        <a href="/blog/index.html">&larr; Back to Blog</a>
+      </p>
+
+      <h1 itemprop="name" style="margin-top: 0;">microVLA: Demystifying Vision-Language-Action Models from First Principles</h1>
+
+      <div class="article-metadata">
+        <span class="article-date">
+          <time datetime="2026-11-04 12:00:00 &#43;0000 UTC" itemprop="datePublished">
+            Nov 04, 2026
+          </time>
+        </span>
+        <span>&middot;</span>
+        <span><a href="https://github.com/varununayak/microvla" target="_blank"><i class="fa fa-github"></i> github.com/varununayak/microvla</a></span>
+      </div>
+
+      <p>
+        If you work in robotics today, it is hard to miss the wave of excitement around <strong>Vision-Language-Action (VLA)</strong> models. Systems like RT-2, OpenVLA, and &pi;<sub>0</sub> have shown that you can feed camera images and natural language instructions into a Transformer and directly output robot control actions.
+      </p>
+
+      <p>
+        If you’re like me, though, reading papers or pulling down a 7-billion-parameter checkpoint from Hugging Face still leaves an itch unscratched. In typical robotics stacks, the core idea gets buried under layers of heavy infrastructure—pretrained vision backbones, complex tokenizers, simulation bindings (MuJoCo, Isaac, ROS), and distributed training harnesses. Strip all of that away, and what <em>is</em> a VLA at its most atomic level?
+      </p>
+
+      <p>
+        Inspired by Andrej Karpathy’s <a href="https://karpathy.github.io/2026/02/12/microgpt/" target="_blank"><code>microgpt</code></a>, I wanted to build the smallest, cleanest, first-principles implementation of an RT-2 style VLA that I could fit into a single Python file—with zero dependencies beyond PyTorch and Matplotlib, and fast enough to train and run closed-loop inference on a laptop CPU in under 30 seconds.
+      </p>
+
+      <div class="repo-callout">
+        <strong>Code:</strong> The complete single-file implementation (~360 lines of core VLA code) is available at
+        <a href="https://github.com/varununayak/microvla" target="_blank"><strong>github.com/varununayak/microvla</strong></a>.
+        Everything—the 2D RGB environment, expert controller, Transformer, closed-loop rollout, and GIF generator—lives inside <a href="https://github.com/varununayak/microvla/blob/main/micro_vla.py" target="_blank"><code>micro_vla.py</code></a>.
+      </div>
+
+      <img src="./micro_vla_demo.gif" alt="microVLA autoregressive rollouts reaching blue, red, and green targets" class="demo-gif">
+
+      <h2>The Core Idea: Robot Actions Are Just Vocabulary Tokens</h2>
+
+      <p>
+        The central insight behind RT-2 style VLAs is deceptively simple: <strong>if you discretize continuous robot actions into bins, motor control becomes indistinguishable from next-token prediction in a language model.</strong>
+      </p>
+
+      <p>
+        In <code>micro_vla.py</code>, we set up a 2D <code>32x32</code> RGB workspace containing a white 2-DOF point-mass gripper and three colored target dots (<code>red</code>, <code>green</code>, <code>blue</code>). At every control step, three modalities are fused into a single causal Transformer stream:
+      </p>
+
+      <ol>
+        <li>
+          <strong>Vision Patches (64 tokens):</strong> The <code>32x32x3</code> RGB observation is sliced into an <code>8x8</code> grid of non-overlapping <code>4x4</code> patches (48 floats per patch), projected to <code>d_model = 64</code> via <code>MicroPatchEmbed</code>, and summed with learned 1D spatial positional embeddings.
+        </li>
+        <li>
+          <strong>Text &amp; Control Tokens (6 tokens):</strong> A minimal word-level vocabulary covering <code>["PAD", "ACT_START", "reach", "red", "green", "blue"]</code>.
+        </li>
+        <li>
+          <strong>Discretized Action Bin Tokens (64 tokens):</strong> Continuous 2D velocity commands (&Delta;<i>x</i>, &Delta;<i>y</i>) &isin; [-1.0, 1.0] are uniformly quantized into 32 bins per axis: <code>X_BIN_0 .. X_BIN_31</code> (token IDs <code>6..37</code>) and <code>Y_BIN_0 .. Y_BIN_31</code> (token IDs <code>38..69</code>).
+        </li>
+      </ol>
+
+      <p>
+        That gives us a unified vocabulary of just <strong>70 tokens</strong>. Each training example is a 68-token sequence where vision patches, language tokens, and discretized motor tokens sit side-by-side:
+      </p>
+
+<pre><code>Input Sequence:  [PATCH_0 ... PATCH_63] | ["reach", &lt;color&gt;] | ["ACT_START"] | [ACT_X_BIN]
+Target Sequence: [   ... ignored ...  ] | [  ... ignored ... ] |  [ACT_X_BIN]  | [ACT_Y_BIN]</code></pre>
+
+      <p>
+        A tiny 3-layer, 4-head causal Transformer (<code>MicroVLA</code>, 117K parameters) runs over this 68-token sequence and is trained with standard cross-entropy loss (with <code>ignore_index=-100</code> masking out the vision and prompt positions) to predict <code>ACT_X_BIN</code> and <code>ACT_Y_BIN</code>.
+      </p>
+
+      <h2>The Robotics Catch: Imitation Learning &amp; Causal Confusion</h2>
+
+      <p>
+        Building a toy model from scratch is always humbling because there is nowhere for bugs—or bad assumptions—to hide.
+      </p>
+
+      <p>
+        In my first pass at generating synthetic expert trajectories, I spawned the gripper and the three colored dots, picked a random prompt (say, <code>"reach blue"</code>), and stepped a proportional controller for 15 steps toward the blue dot. The training loss dropped nicely, so I ran an inference rollout on an unseen state. The gripper moved decisively, smoothly, and confidently—straight into the <em>red</em> dot.
+      </p>
+
+      <p>
+        Why? Think about what a 15-step expert trajectory looks like. At <i>t</i> = 0, the gripper starts at a random spot. By <i>t</i> = 2 &hellip; 14 (nearly 90% of the training frames!), the gripper is already moving toward—and is closest to—the target dot specified by the prompt. A causal Transformer trained naively on single-prompt trajectories discovers a classic imitation-learning shortcut: <strong>ignore the language token <code>&lt;color&gt;</code> altogether and simply move toward whichever colored dot is closest to the white gripper.</strong>
+      </p>
+
+      <p>
+        This is a textbook case of <em>causal confusion</em> in behavioral cloning. To force the network to actually ground language in vision, <code>generate_vla_dataset</code> supervises <strong>all three counterfactual prompts</strong> (<code>"reach red"</code>, <code>"reach green"</code>, <code>"reach blue"</code>) on every rendered visual frame along a trajectory, and <code>train_vla</code> groups those counterfactual triplets into the same mini-batch. Because the image is identical across all three prompts in the triplet, any gradient that ignores the language token cancels out to zero—forcing the attention heads on <code>"ACT_START"</code> to bind the prompted color word to its matching visual patch coordinates.
+      </p>
+
+      <h2>Running It in 25 Seconds on CPU</h2>
+
+      <p>
+        You can run the entire pipeline—on-the-fly trajectory generation, 520 steps of AdamW training, closed-loop autoregressive evaluation across all three language instructions on an unseen state, ASCII trajectory visualization, and animated GIF export—with two commands:
+      </p>
+
+<pre><code class="language-bash">pip install torch matplotlib pillow
+python micro_vla.py</code></pre>
+
+      <p>
+        During inference (<code>run_inference</code>), the model runs in closed loop: at each timestep <i>t</i>, it renders the current <code>32x32</code> RGB image, feeds <code>[PATCH_0..63, "reach", &lt;color&gt;, "ACT_START"]</code> to sample <code>ACT_X_BIN</code>, appends <code>ACT_X_BIN</code> to sample <code>ACT_Y_BIN</code>, dequantizes both tokens back into continuous velocities (&Delta;<i>x</i>, &Delta;<i>y</i>), steps the environment, and repeats:
+      </p>
+
+<pre><code>Unified VLA Vocabulary Size: 70 tokens (6 text/control + 32 X-bins + 32 Y-bins)
+Generating synthetic expert demonstrations (250 episodes x 10 steps x 3 prompts = 7,500 sequences)...
+Initialized MicroVLA | Parameters: 117,248 | Sequence Length: 68 tokens
+
+--- Training MicroVLA on CPU ---
+step    1 /  520 | loss: 4.4279 | elapsed:  0.07s
+step  130 /  520 | loss: 1.4015 | elapsed:  5.75s
+step  260 /  520 | loss: 1.2988 | elapsed: 11.48s
+step  390 /  520 | loss: 0.9127 | elapsed: 17.60s
+step  520 /  520 | loss: 0.7377 | elapsed: 23.72s
+
+=== Autoregressive Rollout: 'reach blue' ===
+Start: (17.8, 13.2) -&gt; Goal (BLUE): (25.9, 25.1) | Distance: 14.34px -&gt; 2.07px (min: 1.46px)
++--------------------------------+
+|................................|
+|................................|
+|................................|
+|.....R..........................|
+|................................|
+|................................|
+|..................0.............|
+|....................1...........|
+|................................|
+|......G...............2.........|
+|........................3.......|
+|......................4.........|
+|......................6.5.B.....|
+|........................7@9.....|
+|................................|
+|................................|
++--------------------------------+
+Legend: [R/G/B] Targets | [0..9] Gripper Path | [@] Final Gripper Position
+  t= 1 | tokens=(X_BIN_31, Y_BIN_31) -&gt; action=(+1.00, +1.00) | dist_to_goal=11.31px
+  t= 2 | tokens=(X_BIN_31, Y_BIN_31) -&gt; action=(+1.00, +1.00) | dist_to_goal= 8.32px
+  t= 3 | tokens=(X_BIN_31, Y_BIN_31) -&gt; action=(+1.00, +1.00) | dist_to_goal= 5.48px
+  t= 4 | tokens=(X_BIN_0 , Y_BIN_31) -&gt; action=(-1.00, +1.00) | dist_to_goal= 4.76px
+  t= 5 | tokens=(X_BIN_31, Y_BIN_31) -&gt; action=(+1.00, +1.00) | dist_to_goal= 1.68px
+  t=14 | tokens=(X_BIN_15, Y_BIN_16) -&gt; action=(-0.03, +0.03) | dist_to_goal= 1.98px
+  t=15 | tokens=(X_BIN_15, Y_BIN_16) -&gt; action=(-0.03, +0.03) | dist_to_goal= 2.07px</code></pre>
+
+      <p>
+        Notice what happens in the bottom-left and bottom-middle histograms of the animation as the rollout progresses: at <i>t</i> = 1 &hellip; 3, the autoregressive probability distributions <i>P</i>(<code>ACT_X_BIN</code>) and <i>P</i>(<code>ACT_Y_BIN</code>) peak sharply at +1.0 to drive the gripper toward the blue target; once the gripper lands on the target, the distribution shifts cleanly to the center bins (<code>X_BIN_15</code>, <code>Y_BIN_16</code> &approx; 0.0) so the robot holds position at the goal.
+      </p>
+
+      <p>
+        Check out the repository at <a href="https://github.com/varununayak/microvla" target="_blank"><strong>github.com/varununayak/microvla</strong></a>—and have fun hacking on it!
+      </p>
+
+    </div>
+  </article>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="powered-by">
+
+        &copy;
+        <script>document.write(new Date().getFullYear());</script> Varun Nayak &middot;
+
+        Powered by the <a href="https://github.com/gcushen/hugo-academic" target="_blank">Academic
+          theme</a> for <a href="http://gohugo.io" target="_blank">Hugo</a>.
+
+        <span class="pull-right" aria-hidden="true">
+          <a href="#" id="back_to_top">
+            <span class="button_icon">
+              <i class="fa fa-chevron-up fa-2x"></i>
+            </span>
+          </a>
+        </span>
+
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+    integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ=="
+    crossorigin="anonymous"></script>
+  <script src="/js/hugo-academic.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+
+</html>
